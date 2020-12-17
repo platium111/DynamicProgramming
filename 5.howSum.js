@@ -1,13 +1,37 @@
+// m is target sum, n is numbers
+// time | O(n^m * m)
+// space | O(m)
 const howSum = (targetSum, arrNumbers) => {
   if (targetSum === 0) return [];
   if (targetSum < 0) return null;
   for (let numElement of arrNumbers) {
     const remainElement = targetSum - numElement;
-    const remainResult = howSum(remainElement, numbers); // result of next
+    const remainResult = howSum(remainElement, arrNumbers); // result of next
     if (remainResult !== null) {
       return [...remainResult, numElement]; // result of next + current number
     }
   }
+  return null;
+};
+
+console.log(howSum(7, [2, 3, 4, 7]));
+
+// time | O(n*m)
+// space | O(m * n ~ m^2) => almost from memo with m key and n in array
+const howSumMemo = (targetSum, arrNumbers, memo = {}) => {
+  if (targetSum in memo) return memo[targetSum];
+  if (targetSum === 0) return [];
+  if (targetSum < 0) return null;
+  for (let numElement of arrNumbers) {
+    const remainElement = targetSum - numElement;
+    const remainResult = howSum(remainElement, arrNumbers); // result of next
+    if (remainResult !== null) {
+      memo[targetSum] = [...remainResult, numElement]; // result of next + current number
+      return memo[targetSum];
+    }
+  }
+  memo[targetSum] = null;
+  return null;
 };
 
 // -> short step
